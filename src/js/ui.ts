@@ -8,7 +8,7 @@ import { TIERS, getTierLabel, APP_CONFIG, ICONS_PATH } from './config';
 import Calculator from './calculator';
 import type { ExportFormat, TierSelection } from '../types/index';
 import { calculateAbyssalKeyResources, calculateCelestialKeyResources, calculateGodKeyResources, combineResources } from './key-database';
-import { calculateTokenResources, calculateTokenItemResources, combineTokenResources } from './token-database';
+import { calculateTokenResources, calculateTokenItemResources, combineTokenResources, TOKEN_ICONS } from './token-database';
 import { DATABASE } from './database';
 
 export default class UI {
@@ -1133,12 +1133,8 @@ export default class UI {
         
         // Afficher les tokens
         filteredTokens.forEach(({ name, quantity }) => {
-          let itemIcon = `${ICONS_PATH}default.png`;
-          
-          // Mapping spécial pour les tokens qui ne sont pas dans la base de données principale
-          if (name.toLowerCase().includes('token')) {
-            itemIcon = `${ICONS_PATH}ancient_token.png`;
-          }
+          // Utiliser l'icône spécifique du token si disponible, sinon utiliser l'icône par défaut
+          let itemIcon = TOKEN_ICONS[name] || `${ICONS_PATH}ancient_token.png`;
           
           const resultDiv = this.createResultElement(name, quantity, itemIcon);
           this.resultsContainer!.appendChild(resultDiv);

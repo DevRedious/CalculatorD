@@ -3,10 +3,27 @@
  * Basé sur l'analyse de l'Excel "Ancient Token Calculator v1"
  */
 
+import { ICONS_PATH } from './config';
+
 export interface TokenCosts {
   tokens: Record<string, number>;      // Coûts des tokens (tous à 2)
   resources: Record<string, number>;    // Coûts des ressources par cluster
 }
+
+/**
+ * Mapping des noms de tokens vers leurs icônes spécifiques
+ */
+export const TOKEN_ICONS: Record<string, string> = {
+  "Raptor Token": `${ICONS_PATH}Raptor's Ancient Token.png`,
+  "Carno Token": `${ICONS_PATH}Carno's Ancient Token.png`,
+  "Bronto Token": `${ICONS_PATH}Bronto's Ancient Token.png`,
+  "Giga Token": `${ICONS_PATH}Gigant's Ancient Token.png`,
+  "Rex Token": `${ICONS_PATH}Rex's Ancient Token.png`,
+  "Trice Token": `${ICONS_PATH}Trike's Ancient Token.png`,
+  "Stego Token": `${ICONS_PATH}Stego's Ancient Token.png`,
+  "Quetz Token": `${ICONS_PATH}Quetz's Ancient Token.png`,
+  "Wyvern Token": `${ICONS_PATH}Wyvern's Ancient Token.png`
+};
 
 /**
  * Base de données des coûts de référence pour les Ancient Tokens
