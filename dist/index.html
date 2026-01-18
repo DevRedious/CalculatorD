@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Calculateur de ressources pour ARK: Primal Descended - Calculez les ressources nécessaires pour chaque tier">
+    <title>Rilindra - Accueil</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+  <script type="module" crossorigin src="/assets/main-Cy_wKy7C.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-DIv7TAOD.css">
+</head>
+<body style="display: flex; flex-direction: column; height: 100vh; overflow: hidden;">
+    <!-- Theme Toggle Button -->
+    <div id="themeToggleContainer">
+        <label>
+            <input id="themeToggle" class="toggle-checkbox" type="checkbox" aria-label="Changer de thème">
+            <div class="toggle-slot">
+                <div class="toggle-button"></div>
+            </div>
+        </label>
+    </div>
+
+    <!-- Header avec Navigation -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="/images/favicon.png" alt="Rilindra Logo">
+                <span class="logo-text">Rilindra</span>
+            </div>
+            <nav class="main-nav">
+                <a href="#calculator" class="nav-link active">
+                    <span class="nav-icon">🏠</span>
+                    <span>Calculateur</span>
+                </a>
+                <a href="#results" class="nav-link">
+                    <span class="nav-icon">📊</span>
+                    <span>Résultats</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <div class="page-title" style="flex-shrink: 0;">
+        <h1>Calculateur de Ressources</h1>
+        <p>Calculez les ressources nécessaires pour chaque tier</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Calculator Section (gauche) -->
+        <section id="calculator" aria-labelledby="calculator-heading">
+            <!-- Tiers Container (will be populated by JavaScript) -->
+            <div id="tiers" class="tiers-grid" role="region" aria-label="Sélection des tiers">
+                <!-- Les tiers seront générés par JavaScript -->
+            </div>
+        </section>
+
+        <!-- Results Section (droite) -->
+        <section id="results-section" aria-labelledby="results-heading">
+            <div class="results-header">
+                <h2 id="results-heading">Ressources Nécessaires</h2>
+                <button id="resetBtn" type="button" aria-label="Réinitialiser tous les compteurs">
+                    🔄 Réinitialiser
+                </button>
+            </div>
+
+            <div id="results" class="results-grid" role="region" aria-label="Résultats du calcul" aria-live="polite">
+                <p class="no-results">Sélectionnez des tiers pour voir les ressources nécessaires</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 ARK: Primal Descended Calculator | Communauté ARK</p>
+        <p>Conçu pour la communauté avec ❤️</p>
+    </footer>
+
+    <!-- JavaScript Modules -->
+</body>
+</html>

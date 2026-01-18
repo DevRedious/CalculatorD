@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification - ARK Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 2rem;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .check-group {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .check-group h2 {
+            color: #495057;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border-radius: 4px;
+            background: white;
+        }
+
+        .check-item.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .check-item.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .check-item.warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            min-width: 30px;
+        }
+
+        .check-item.success .icon { color: #28a745; }
+        .check-item.error .icon { color: #dc3545; }
+        .check-item.warning .icon { color: #ffc107; }
+
+        .message {
+            flex: 1;
+            color: #333;
+        }
+
+        .status {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        code {
+            background: #f1f3f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Vérification du Calculateur ARK</h1>
+        <p class="subtitle">Vérification automatique de l'installation et des fichiers</p>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Vérification en cours...</p>
+        </div>
+
+        <div id="results" style="display: none;"></div>
+    </div>
+
+    <script type="module">
+        const checks = [];
+        const results = document.getElementById('results');
+        const loading = document.getElementById('loading');
+
+        function addCheck(type, message) {
+            checks.push({ type, message });
+        }
+
+        function displayResults() {
+            loading.style.display = 'none';
+            results.style.display = 'block';
+
+            const groups = {
+                'Fichiers Principaux': [],
+                'Modules JavaScript': [],
+                'Ressources': [],
+                'Configuration': []
+            };
+
+            // Grouper les checks
+            checks.forEach(check => {
+                if (check.message.includes('index.html') || check.message.includes('CSS')) {
+                    groups['Fichiers Principaux'].push(check);
+                } else if (check.message.includes('.js')) {
+                    groups['Modules JavaScript'].push(check);
+                } else if (check.message.includes('icône') || check.message.includes('tier')) {
+                    groups['Ressources'].push(check);
+                } else {
+                    groups['Configuration'].push(check);
+                }
+            });
+
+            // Afficher les groupes
+            for (const [groupName, groupChecks] of Object.entries(groups)) {
+                if (groupChecks.length === 0) continue;
+
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'check-group';
+                groupDiv.innerHTML = `<h2>${groupName}</h2>`;
+
+                groupChecks.forEach(check => {
+                    const item = document.createElement('div');
+                    item.className = `check-item ${check.type}`;
+                    item.innerHTML = `
+                        <span class="icon">${check.type === 'success' ? '✅' : check.type === 'error' ? '❌' : '⚠️'}</span>
+                        <span class="message">${check.message}</span>
+                    `;
+                    groupDiv.appendChild(item);
+                });
+
+                results.appendChild(groupDiv);
+            }
+
+            // Statut global
+            const errors = checks.filter(c => c.type === 'error').length;
+            const warnings = checks.filter(c => c.type === 'warning').length;
+            const success = checks.filter(c => c.type === 'success').length;
+
+            const statusDiv = document.createElement('div');
+            statusDiv.className = errors > 0 ? 'status error' : 'status success';
+
+            if (errors > 0) {
+                statusDiv.innerHTML = `
+                    ❌ ${errors} erreur(s) détectée(s)
+                    <br><small>${success} vérifications passées, ${warnings} avertissements</small>
+                    <br><a href="#" onclick="location.reload()" class="btn">Réessayer</a>
+                `;
+            } else {
+                statusDiv.innerHTML = `
+                    ✅ Tous les tests passés!
+                    <br><small>${success} vérifications réussies</small>
+                    <br><a href="index.html" class="btn">Lancer le Calculateur</a>
+                `;
+            }
+
+            results.appendChild(statusDiv);
+        }
+
+        async function runChecks() {
+            // Check 1: Modules JS
+            try {
+                const { TIERS } = await import('./js/config.js');
+                addCheck('success', `Module <code>config.js</code> chargé (${TIERS.length} tiers définis)`);
+            } catch (e) {
+                addCheck('error', `Module <code>config.js</code> impossible à charger: ${e.message}`);
+            }
+
+            try {
+                const { DATABASE } = await import('./js/database.js');
+                const itemCount = Object.keys(DATABASE).length;
+                addCheck('success', `Module <code>database.js</code> chargé (${itemCount} items dans la DB)`);
+            } catch (e) {
+                addCheck('error', `Module <code>database.js</code> impossible à charger: ${e.message}`);
+            }
+
+            try {
+                const Calculator = (await import('./js/calculator.js')).default;
+                const calc = new Calculator();
+                addCheck('success', 'Module <code>calculator.js</code> fonctionnel');
+            } catch (e) {
+                addCheck('error', `Module <code>calculator.js</code> erreur: ${e.message}`);
+            }
+
+            try {
+                const UI = (await import('./js/ui.js')).default;
+                addCheck('success', 'Module <code>ui.js</code> chargé');
+            } catch (e) {
+                addCheck('error', `Module <code>ui.js</code> erreur: ${e.message}`);
+            }
+
+            // Check 2: CSS
+            try {
+                const response = await fetch('css/styles.css');
+                if (response.ok) {
+                    const size = Math.round((await response.blob()).size / 1024);
+                    addCheck('success', `Fichier CSS chargé (${size}KB)`);
+                } else {
+                    addCheck('error', 'Fichier CSS introuvable');
+                }
+            } catch (e) {
+                addCheck('error', `Erreur CSS: ${e.message}`);
+            }
+
+            // Check 3: Icons
+            const { ICONS_PATH, TIERS } = await import('./js/config.js');
+
+            // Test quelques icônes
+            const testIcons = ['T4_Abyssal', 'T5_Chaos', 'T9_Cube'];
+            for (const tier of testIcons) {
+                try {
+                    const response = await fetch(`${ICONS_PATH}${tier}.png`);
+                    if (response.ok) {
+                        addCheck('success', `Icône tier <code>${tier}.png</code> trouvée`);
+                    } else {
+                        addCheck('error', `Icône tier <code>${tier}.png</code> manquante (404)`);
+                    }
+                } catch (e) {
+                    addCheck('error', `Erreur icône ${tier}: ${e.message}`);
+                }
+            }
+
+            // Test icônes items
+            const testItems = ['artefact', 'devilish_soul', 'black_pearl'];
+            for (const item of testItems) {
+                try {
+                    const response = await fetch(`${ICONS_PATH}${item}.png`);
+                    if (response.ok) {
+                        addCheck('success', `Icône item <code>${item}.png</code> trouvée`);
+                    } else {
+                        addCheck('warning', `Icône item <code>${item}.png</code> manquante`);
+                    }
+                } catch (e) {
+                    addCheck('warning', `Erreur icône ${item}: ${e.message}`);
+                }
+            }
+
+            // Check 4: Configuration
+            const { APP_CONFIG } = await import('./js/config.js');
+            addCheck('success', `Configuration chargée (localStorage key: <code>${APP_CONFIG.storageKey}</code>)`);
+
+            // Afficher les résultats
+            displayResults();
+        }
+
+        // Lancer les vérifications
+        runChecks().catch(error => {
+            loading.innerHTML = `
+                <div style="color: #dc3545;">
+                    <h3>❌ Erreur Critique</h3>
+                    <p>${error.message}</p>
+                    <p><small>Vérifiez que vous utilisez un serveur HTTP (pas file://)</small></p>
+                    <a href="#" onclick="location.reload()" class="btn">Réessayer</a>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>
