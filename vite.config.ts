@@ -10,18 +10,10 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html')
-      },
-      output: {
-        // Laisser Vite gérer automatiquement le code splitting
       }
     },
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: false, // Garder les console.log pour debug
-        drop_debugger: true
-      }
-    }
+    minify: 'esbuild',
+    target: 'es2020'
   },
   server: {
     port: 3000,
