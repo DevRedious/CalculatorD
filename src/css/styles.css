@@ -306,6 +306,26 @@ header {
 }
 
 /* Responsive pour la navigation */
+@media (max-width: 900px) {
+  .calculator-nav {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  
+  .calc-type-btn {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.9rem;
+  }
+  
+  .calc-icon {
+    font-size: 1rem;
+  }
+  
+  .calc-label {
+    font-size: 0.75rem;
+  }
+}
+
 @media (max-width: 768px) {
   .main-nav {
     flex-direction: column;
@@ -314,6 +334,11 @@ header {
   
   .calc-type-btn {
     width: 100%;
+  }
+  
+  .calculator-nav {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -708,12 +733,28 @@ label:focus-within {
     width: 100% !important;
     height: auto !important;
     max-width: 100% !important;
+    padding: 0.5rem 0.8rem;
   }
   
   #calculator,
   #results-section {
     position: static;
     max-height: none;
+  }
+  
+  #results-section {
+    margin-top: 1rem;
+    order: 2;
+  }
+  
+  #calculator {
+    order: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .container {
+    padding: 0.5rem 0.6rem;
   }
 }
 
@@ -746,7 +787,8 @@ label:focus-within {
 }
 
 /* Les cartes de clés prennent toute la largeur */
-.tier[data-key-type] {
+.tier[data-key-type],
+.tier[data-token-type] {
   width: 100%;
   max-width: 100%;
   min-height: 140px; /* Augmenter la hauteur minimale */
@@ -754,7 +796,8 @@ label:focus-within {
 }
 
 /* Conteneur des clés : une colonne pour que les cartes prennent toute la largeur */
-#tiers:has(.tier[data-key-type]) {
+#tiers:has(.tier[data-key-type]),
+#tiers:has(.tier[data-token-type]) {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -767,94 +810,102 @@ label:focus-within {
   gap: 0.8rem;
 }
 
-/* Ajustements spécifiques pour les cartes de clés */
-.tier[data-key-type] .tier-header {
+/* Ajustements spécifiques pour les cartes de clés et tokens */
+.tier[data-key-type] .tier-header,
+.tier[data-token-type] .tier-header {
   margin-bottom: 1rem;
   gap: 1rem;
 }
 
-.tier[data-key-type] .tier-icon {
+.tier[data-key-type] .tier-icon,
+.tier[data-token-type] .tier-icon {
   width: 60px;
   height: 60px;
 }
 
-.tier[data-key-type] .tier-name {
+.tier[data-key-type] .tier-name,
+.tier[data-token-type] .tier-name {
   font-size: 1.1rem;
 }
 
-.tier[data-key-type] .tier-category {
+.tier[data-key-type] .tier-category,
+.tier[data-token-type] .tier-category {
   font-size: 0.8rem;
   padding: 0.35rem 0.8rem;
 }
 
-.tier[data-key-type] .tier-description {
-  display: block; /* Afficher la description pour les clés */
+.tier[data-key-type] .tier-description,
+.tier[data-token-type] .tier-description {
+  display: block; /* Afficher la description pour les clés et tokens */
   font-size: 0.9rem;
   color: var(--text-secondary);
   margin-bottom: 0.8rem;
   line-height: 1.4;
 }
 
-.tier[data-key-type] .counter {
+.tier[data-key-type] .counter,
+.tier[data-token-type] .counter {
   padding-top: 0.8rem;
   margin-top: 0.8rem;
 }
 
-.tier[data-key-type] .counter button {
+.tier[data-key-type] .counter button,
+.tier[data-token-type] .counter button {
   width: 48px;
   height: 48px;
   font-size: 20px;
 }
 
-.tier[data-key-type] .counter input {
+.tier[data-key-type] .counter input,
+.tier[data-token-type] .counter input {
   width: 80px;
   font-size: 1rem;
   padding: 0.4rem;
 }
 
-/* Réinitialiser les styles pour les cartes de tiers (sans data-key-type) */
-.tier[data-tier]:not([data-key-type]) {
+/* Réinitialiser les styles pour les cartes de tiers (sans data-key-type ni data-token-type) */
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) {
   width: auto !important;
   max-width: none !important;
   min-height: 120px !important;
   padding: 0.8rem !important;
 }
 
-.tier[data-tier]:not([data-key-type]) .tier-header {
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) .tier-header {
   margin-bottom: 0.6rem !important;
   gap: 0.6rem !important;
 }
 
-.tier[data-tier]:not([data-key-type]) .tier-icon {
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) .tier-icon {
   width: 40px !important;
   height: 40px !important;
 }
 
-.tier[data-tier]:not([data-key-type]) .tier-name {
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) .tier-name {
   font-size: 0.9rem !important;
 }
 
-.tier[data-tier]:not([data-key-type]) .tier-category {
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) .tier-category {
   font-size: 0.7rem !important;
   padding: 0.25rem 0.6rem !important;
 }
 
-.tier[data-tier]:not([data-key-type]) .tier-description {
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) .tier-description {
   display: none !important;
 }
 
-.tier[data-tier]:not([data-key-type]) .counter {
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) .counter {
   padding-top: 0.6rem !important;
   margin-top: 0.5rem !important;
 }
 
-.tier[data-tier]:not([data-key-type]) .counter button {
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) .counter button {
   width: 44px !important;
   height: 44px !important;
   font-size: 16px !important;
 }
 
-.tier[data-tier]:not([data-key-type]) .counter input {
+.tier[data-tier]:not([data-key-type]):not([data-token-type]) .counter input {
   width: 50px !important;
   font-size: 0.85rem !important;
   padding: 0.2rem !important;
@@ -974,13 +1025,31 @@ label:focus-within {
 }
 
 /* État vide pour les types key et ancient-token */
-.empty-state {
+.empty-state,
+.no-results {
   text-align: center;
   padding: 3rem 1.5rem;
   color: var(--text-tertiary);
   font-size: 1rem;
   font-style: italic;
   grid-column: 1 / -1;
+}
+
+/* Responsive pour les états vides */
+@media (max-width: 768px) {
+  .empty-state,
+  .no-results {
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .empty-state,
+  .no-results {
+    padding: 1.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
 }
 
 .counter {
@@ -1760,6 +1829,139 @@ footer p {
     0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
+/* Responsive pour les modals */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    max-width: 95%;
+    margin: 1rem;
+  }
+  
+  .modal-header {
+    padding: 0.8rem 1rem;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .modal-close {
+    width: 28px;
+    height: 28px;
+    font-size: 1.5rem;
+  }
+  
+  .modal-body {
+    padding: 0.8rem 1rem;
+  }
+  
+  .modal-body p {
+    font-size: 0.85rem;
+  }
+  
+  .modal-body ul {
+    padding-left: 1.2rem;
+  }
+  
+  .modal-body li {
+    font-size: 0.85rem;
+  }
+  
+  .thanks-special {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .thanks-highlight {
+    font-size: 0.85rem;
+  }
+  
+  .thanks-initiator-name {
+    font-size: 1.1rem;
+  }
+  
+  .thanks-initiator {
+    font-size: 0.8rem;
+  }
+  
+  .thanks-players {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .thanks-players p {
+    font-size: 0.85rem;
+  }
+  
+  .modal-signature {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 98%;
+    max-width: 98%;
+    margin: 0.5rem;
+  }
+  
+  .modal-header {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .modal-header h2 {
+    font-size: 1rem;
+  }
+  
+  .modal-close {
+    width: 24px;
+    height: 24px;
+    font-size: 1.3rem;
+  }
+  
+  .modal-body {
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .modal-body p {
+    font-size: 0.8rem;
+  }
+  
+  .modal-body ul {
+    padding-left: 1rem;
+  }
+  
+  .modal-body li {
+    font-size: 0.8rem;
+  }
+  
+  .thanks-special {
+    padding: 0.5rem 0.7rem;
+  }
+  
+  .thanks-highlight {
+    font-size: 0.8rem;
+  }
+  
+  .thanks-initiator-name {
+    font-size: 1rem;
+  }
+  
+  .thanks-initiator {
+    font-size: 0.75rem;
+  }
+  
+  .thanks-players {
+    padding: 0.5rem 0.7rem;
+  }
+  
+  .thanks-players p {
+    font-size: 0.8rem;
+  }
+  
+  .modal-signature {
+    font-size: 0.75rem;
+  }
+}
+
 /* ==========================================================================
    Responsive Design
    ========================================================================== */
@@ -1774,28 +1976,33 @@ footer p {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  /* Ajustements pour les cartes de clés sur tablette */
-  .tier[data-key-type] {
+  /* Ajustements pour les cartes de clés et tokens sur tablette */
+  .tier[data-key-type],
+  .tier[data-token-type] {
     padding: 1rem;
     min-height: 130px;
   }
   
-  .tier[data-key-type] .tier-icon {
+  .tier[data-key-type] .tier-icon,
+  .tier[data-token-type] .tier-icon {
     width: 55px;
     height: 55px;
   }
   
-  .tier[data-key-type] .tier-name {
+  .tier[data-key-type] .tier-name,
+  .tier[data-token-type] .tier-name {
     font-size: 1rem;
   }
   
-  .tier[data-key-type] .counter button {
+  .tier[data-key-type] .counter button,
+  .tier[data-token-type] .counter button {
     width: 46px;
     height: 46px;
     font-size: 18px;
   }
   
-  .tier[data-key-type] .counter input {
+  .tier[data-key-type] .counter input,
+  .tier[data-token-type] .counter input {
     width: 70px;
     font-size: 0.95rem;
   }
@@ -1815,6 +2022,19 @@ footer p {
     min-height: 50px;
   }
   
+  .logo {
+    gap: 0.8rem;
+  }
+  
+  .logo-text {
+    font-size: 1.3rem;
+  }
+  
+  .logo img {
+    width: 38px;
+    height: 38px;
+  }
+  
   .main-nav {
     width: 100%;
     margin-top: 0.5rem;
@@ -1823,6 +2043,29 @@ footer p {
   
   #themeToggleContainer {
     order: 2;
+  }
+  
+  /* Ajustements pour les résultats sur tablette */
+  #results-section {
+    padding: 0.7rem;
+  }
+  
+  #results-section h2 {
+    font-size: 0.95rem;
+  }
+  
+  .result {
+    font-size: 13px;
+    padding: 0.35rem 0.5rem;
+  }
+  
+  .result img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  .results-section-title {
+    font-size: 0.85rem;
   }
 
   nav ul {
@@ -1855,43 +2098,51 @@ footer p {
     font-size: 14px;
   }
   
-  /* Ajustements pour les cartes de clés sur tablette portrait */
-  .tier[data-key-type] {
+  /* Ajustements pour les cartes de clés et tokens sur tablette portrait */
+  .tier[data-key-type],
+  .tier[data-token-type] {
     padding: 0.9rem;
     min-height: 125px;
   }
   
-  .tier[data-key-type] .tier-header {
+  .tier[data-key-type] .tier-header,
+  .tier[data-token-type] .tier-header {
     margin-bottom: 0.8rem;
     gap: 0.8rem;
   }
   
-  .tier[data-key-type] .tier-icon {
+  .tier[data-key-type] .tier-icon,
+  .tier[data-token-type] .tier-icon {
     width: 50px;
     height: 50px;
   }
   
-  .tier[data-key-type] .tier-name {
+  .tier[data-key-type] .tier-name,
+  .tier[data-token-type] .tier-name {
     font-size: 0.95rem;
   }
   
-  .tier[data-key-type] .tier-description {
+  .tier[data-key-type] .tier-description,
+  .tier[data-token-type] .tier-description {
     font-size: 0.85rem;
     margin-bottom: 0.6rem;
   }
   
-  .tier[data-key-type] .counter {
+  .tier[data-key-type] .counter,
+  .tier[data-token-type] .counter {
     padding-top: 0.6rem;
     margin-top: 0.6rem;
   }
   
-  .tier[data-key-type] .counter button {
+  .tier[data-key-type] .counter button,
+  .tier[data-token-type] .counter button {
     width: 44px;
     height: 44px;
     font-size: 18px;
   }
   
-  .tier[data-key-type] .counter input {
+  .tier[data-key-type] .counter input,
+  .tier[data-token-type] .counter input {
     width: 65px;
     font-size: 0.9rem;
     padding: 0.3rem;
@@ -1911,22 +2162,35 @@ footer p {
     grid-template-columns: 1fr;
   }
   
-  /* Ajustements pour les cartes de clés sur grand mobile */
-  .tier[data-key-type] {
+  /* Ajustements pour les résultats sur grand mobile */
+  #results-section {
+    padding: 0.6rem;
+  }
+  
+  .result {
+    font-size: 13px;
+  }
+  
+  /* Ajustements pour les cartes de clés et tokens sur grand mobile */
+  .tier[data-key-type],
+  .tier[data-token-type] {
     padding: 0.85rem;
     min-height: 115px;
   }
   
-  .tier[data-key-type] .tier-icon {
+  .tier[data-key-type] .tier-icon,
+  .tier[data-token-type] .tier-icon {
     width: 42px;
     height: 42px;
   }
   
-  .tier[data-key-type] .tier-name {
+  .tier[data-key-type] .tier-name,
+  .tier[data-token-type] .tier-name {
     font-size: 0.88rem;
   }
   
-  .tier[data-key-type] .counter input {
+  .tier[data-key-type] .counter input,
+  .tier[data-token-type] .counter input {
     width: 58px;
   }
 }
@@ -1974,6 +2238,12 @@ footer p {
     font-size: 0.85rem;
   }
   
+  /* Ajustements pour le reset button sur mobile 600px */
+  #resetBtn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.8rem;
+  }
+  
   .tiers-container {
     grid-template-columns: 1fr;
   }
@@ -2002,6 +2272,12 @@ footer p {
     width: 60px;
     font-size: 1.1rem;
   }
+  
+  /* Ajustements pour le reset button sur mobile */
+  #resetBtn {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.8rem;
+  }
 
   .result {
     font-size: 14px;
@@ -2021,52 +2297,85 @@ footer p {
     font-size: 1.2rem;
   }
   
-  /* Ajustements pour les cartes de clés sur mobile */
-  .tier[data-key-type] {
+  /* Ajustements pour les résultats sur mobile */
+  #results-section {
+    padding: 0.6rem;
+  }
+  
+  #results-section h2 {
+    font-size: 0.9rem;
+  }
+  
+  .result {
+    font-size: 13px;
+    padding: 0.35rem 0.5rem;
+  }
+  
+  .result img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  .results-section-title {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.55rem;
+  }
+  
+  /* Ajustements pour les cartes de clés et tokens sur mobile */
+  .tier[data-key-type],
+  .tier[data-token-type] {
     padding: 0.8rem;
     min-height: 120px;
   }
   
-  .tier[data-key-type] .tier-header {
+  .tier[data-key-type] .tier-header,
+  .tier[data-token-type] .tier-header {
     margin-bottom: 0.6rem;
     gap: 0.6rem;
     flex-wrap: wrap;
   }
   
-  .tier[data-key-type] .tier-icon {
+  .tier[data-key-type] .tier-icon,
+  .tier[data-token-type] .tier-icon {
     width: 45px;
     height: 45px;
   }
   
-  .tier[data-key-type] .tier-name {
+  .tier[data-key-type] .tier-name,
+  .tier[data-token-type] .tier-name {
     font-size: 0.9rem;
   }
   
-  .tier[data-key-type] .tier-category {
+  .tier[data-key-type] .tier-category,
+  .tier[data-token-type] .tier-category {
     font-size: 0.7rem;
     padding: 0.3rem 0.6rem;
   }
   
-  .tier[data-key-type] .tier-description {
+  .tier[data-key-type] .tier-description,
+  .tier[data-token-type] .tier-description {
     font-size: 0.8rem;
     margin-bottom: 0.5rem;
     line-height: 1.3;
   }
   
-  .tier[data-key-type] .counter {
+  .tier[data-key-type] .counter,
+  .tier[data-token-type] .counter {
     padding-top: 0.5rem;
     margin-top: 0.5rem;
     flex-wrap: wrap;
     justify-content: center;
   }
   
-  .tier[data-key-type] .counter button {
+  .tier[data-key-type] .counter button,
+  .tier[data-token-type] .counter button {
     width: 44px;
     height: 44px;
     font-size: 18px;
   }
   
-  .tier[data-key-type] .counter input {
+  .tier[data-key-type] .counter input,
+  .tier[data-token-type] .counter input {
     width: 60px;
     font-size: 0.9rem;
     padding: 0.3rem;
@@ -2078,10 +2387,25 @@ footer p {
     gap: 0.4rem;
   }
   
+  .calculator-nav {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  
   .calc-type-btn {
     width: 100%;
     justify-content: center;
     padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .calc-icon {
+    font-size: 1rem;
+  }
+  
+  .calc-label {
+    font-size: 0.75rem;
   }
 }
 
@@ -2121,6 +2445,12 @@ footer p {
   .page-title p {
     font-size: 0.8rem;
   }
+  
+  /* Ajustements pour le reset button sur petit mobile */
+  #resetBtn {
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+  }
 
   header h1 {
     font-size: 1.5rem;
@@ -2140,9 +2470,39 @@ footer p {
     padding: 0.5rem;
   }
   
+  #results-section h2 {
+    font-size: 0.9rem;
+  }
+  
+  .results-header {
+    gap: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+  
+  #resetBtn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+  }
+  
   .result {
     font-size: 13px;
     padding: 0.4rem;
+    gap: 0.4rem;
+  }
+  
+  .result img {
+    width: 22px !important;
+    height: 22px !important;
+  }
+  
+  .result span {
+    font-size: 0.8rem;
+  }
+  
+  .results-section-title {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.5rem;
+    margin: 0.8rem 0 0.4rem 0;
   }
   
   /* Footer responsive */
@@ -2151,53 +2511,72 @@ footer p {
     font-size: 0.8rem;
   }
   
+  footer p {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    margin: 0.3rem 0;
+  }
+  
   footer button {
     padding: 0.5rem 0.8rem;
     font-size: 0.8rem;
   }
   
-  /* Ajustements pour les cartes de clés sur petit mobile */
-  .tier[data-key-type] {
+  .thanks-link {
+    font-size: 0.75rem;
+  }
+  
+  /* Ajustements pour les cartes de clés et tokens sur petit mobile */
+  .tier[data-key-type],
+  .tier[data-token-type] {
     padding: 0.7rem;
     min-height: 110px;
   }
   
-  .tier[data-key-type] .tier-header {
+  .tier[data-key-type] .tier-header,
+  .tier[data-token-type] .tier-header {
     margin-bottom: 0.5rem;
     gap: 0.5rem;
   }
   
-  .tier[data-key-type] .tier-icon {
+  .tier[data-key-type] .tier-icon,
+  .tier[data-token-type] .tier-icon {
     width: 40px;
     height: 40px;
   }
   
-  .tier[data-key-type] .tier-name {
+  .tier[data-key-type] .tier-name,
+  .tier[data-token-type] .tier-name {
     font-size: 0.85rem;
   }
   
-  .tier[data-key-type] .tier-category {
+  .tier[data-key-type] .tier-category,
+  .tier[data-token-type] .tier-category {
     font-size: 0.65rem;
     padding: 0.25rem 0.5rem;
   }
   
-  .tier[data-key-type] .tier-description {
+  .tier[data-key-type] .tier-description,
+  .tier[data-token-type] .tier-description {
     font-size: 0.75rem;
     margin-bottom: 0.4rem;
   }
   
-  .tier[data-key-type] .counter {
+  .tier[data-key-type] .counter,
+  .tier[data-token-type] .counter {
     padding-top: 0.4rem;
     margin-top: 0.4rem;
   }
   
-  .tier[data-key-type] .counter button {
+  .tier[data-key-type] .counter button,
+  .tier[data-token-type] .counter button {
     width: 42px;
     height: 42px;
     font-size: 16px;
   }
   
-  .tier[data-key-type] .counter input {
+  .tier[data-key-type] .counter input,
+  .tier[data-token-type] .counter input {
     width: 55px;
     font-size: 0.85rem;
     padding: 0.25rem;
