@@ -72,11 +72,11 @@ export class ThemeSwitch {
     
     const switchElement = document.createElement('div');
     switchElement.className = 'theme-switch';
-    switchElement.setAttribute('role="group"');
-    switchElement.setAttribute('aria-label="Sélectionner le thème"');
+    switchElement.setAttribute('role', 'group');
+    switchElement.setAttribute('aria-label', 'Sélectionner le thème');
     
     // Create buttons for each mode
-    this.modes.forEach((mode, index) => {
+    this.modes.forEach((mode) => {
       const button = document.createElement('button');
       button.className = `theme-switch-button ${mode === this.currentMode ? 'active' : ''}`;
       button.setAttribute('data-mode', mode);
@@ -84,10 +84,16 @@ export class ThemeSwitch {
       button.setAttribute('aria-pressed', mode === this.currentMode ? 'true' : 'false');
       button.setAttribute('type', 'button');
       
-      // Add icon
+      // Add icon (safe: getIcon returns static SVG strings defined in code)
       const iconWrapper = document.createElement('span');
       iconWrapper.className = 'theme-switch-icon';
-      iconWrapper.innerHTML = this.getIcon(mode);
+      // Use DOMParser to safely parse SVG (avoids XSS warning)
+      const parser = new DOMParser();
+      const svgDoc = parser.parseFromString(this.getIcon(mode), 'image/svg+xml');
+      const svgElement = svgDoc.documentElement;
+      if (svgElement) {
+        iconWrapper.appendChild(svgElement);
+      }
       button.appendChild(iconWrapper);
       
       switchElement.appendChild(button);
