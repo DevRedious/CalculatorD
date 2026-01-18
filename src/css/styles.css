@@ -420,12 +420,13 @@ header {
   padding: 0.5rem 1rem;
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 400px; /* Calculator à gauche, Results à droite */
+  grid-template-columns: 1fr minmax(300px, 400px); /* Calculator à gauche, Results à droite - flexible */
   gap: 1rem;
   align-items: stretch;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow-x: auto; /* Permet le scroll horizontal si nécessaire lors du zoom */
+  overflow-y: visible;
   width: 100%;
   box-sizing: border-box;
 }
@@ -450,20 +451,23 @@ section {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  overflow: hidden;
+  overflow-x: auto; /* Permet le scroll horizontal si nécessaire lors du zoom */
+  overflow-y: visible;
+  min-width: 0; /* Permet de rétrécir si nécessaire */
 }
 
 #calculator {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto; /* Permet le scroll horizontal si nécessaire lors du zoom */
   display: flex;
   flex-direction: column;
   -webkit-overflow-scrolling: touch;
   order: 1; /* S'assurer que c'est la première colonne (gauche) */
   width: 100%;
   max-width: 100%;
+  min-width: 0; /* Permet au flex de rétrécir si nécessaire */
   box-sizing: border-box;
 }
 
@@ -719,13 +723,14 @@ label:focus-within {
 /* Grid de tiers (style cartes) */
 .tiers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(160px, 100%), 1fr)); /* Flexible lors du zoom */
   gap: 0.6rem;
   margin-bottom: 0;
   min-height: 0;
   padding: 0.5rem 0;
   width: 100%;
   max-width: 100%;
+  min-width: 0; /* Permet au grid de rétrécir si nécessaire */
   box-sizing: border-box;
 }
 
@@ -746,21 +751,25 @@ label:focus-within {
     height: auto !important;
     max-width: 100% !important;
     padding: 0.5rem 0.8rem;
+    overflow-x: auto; /* Permet le scroll horizontal si nécessaire lors du zoom */
   }
   
   #calculator,
   #results-section {
     position: static;
     max-height: none;
+    min-width: 0; /* Permet de rétrécir si nécessaire */
   }
   
   #results-section {
     margin-top: 1rem;
     order: 2;
+    max-width: 100%;
   }
   
   #calculator {
     order: 1;
+    max-width: 100%;
   }
 }
 
@@ -787,7 +796,9 @@ label:focus-within {
   flex-direction: column;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   width: auto; /* Réinitialiser la largeur */
-  max-width: none; /* Réinitialiser la largeur max */
+  max-width: 100%; /* Permet de s'adapter lors du zoom */
+  min-width: 0; /* Permet de rétrécir si nécessaire */
+  box-sizing: border-box;
 }
 
 /* S'assurer que les cartes de tiers (sans data-key-type) ont les bonnes dimensions */
@@ -1374,9 +1385,10 @@ label:focus-within {
   flex-direction: column;
   gap: 0.5rem;
   order: 2; /* S'assurer que c'est la deuxième colonne (droite) */
-  overflow-x: hidden;
+  overflow-x: auto; /* Permet le scroll horizontal si nécessaire lors du zoom */
   overflow-y: hidden;
-  min-width: 0;
+  min-width: 0; /* Permet au flex de rétrécir si nécessaire */
+  max-width: 100%;
 }
 
 /* Ajustements pour le thème clair */
@@ -1429,7 +1441,7 @@ label:focus-within {
   margin-top: 0;
   flex: 1;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto; /* Permet le scroll horizontal si nécessaire lors du zoom */
   min-height: 0;
   min-width: 0;
   width: 100%;
