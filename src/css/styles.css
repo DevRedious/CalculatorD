@@ -2,6 +2,64 @@
    ARK: Primal Descended Calculator - Consolidated Styles
    ========================================================================== */
 
+/* ==========================================================================
+   INVARIANTS STRUCTURELS CSS - NE JAMAIS ÉCRASER
+   ==========================================================================
+
+   Les propriétés suivantes garantissent la cohésion structurelle des
+   cartes .tier et DOIVENT rester inchangées dans TOUS les media queries.
+
+   CARTE .tier (conteneur principal):
+   ----------------------------------
+   - display: flex                  → Toujours flex, jamais grid/block
+   - flex-direction: column         → Toujours colonne verticale
+   - position: relative             → Pour pseudo-élément absolu
+   - min-width: 0                   → Permet compression en flex parent
+
+   COUNTER .counter (enfant de .tier):
+   -----------------------------------
+   - margin-top: auto               → CRITIQUE: Ancre le counter en bas
+                                      Ne JAMAIS utiliser margin-top fixe
+                                      (px, rem) dans les media queries
+
+   ICÔNES .tier-icon, .tier img:
+   -----------------------------
+   - width: [valeur]px              → Taille fixe uniquement
+   - height: [valeur]px             → Taille fixe uniquement
+   - JAMAIS height: auto            → Crée des conflits de dimensionnement
+
+   PSEUDO-ÉLÉMENT .tier::before (décoratif):
+   -----------------------------------------
+   - position: absolute             → Hors flux layout
+   - z-index: 0                     → Derrière le contenu (z-index: 1)
+   - pointer-events: none           → N'interfère pas avec interactions
+   - top/left/right: 0, bottom: auto, height: 3px → Positionné en haut sans conflit
+
+   MEDIA QUERIES - PROPRIÉTÉS AUTORISÉES:
+   ---------------------------------------
+   ✓ Ajustements autorisés:
+     - padding, margin (hors margin-top sur .counter)
+     - gap (espacement flex/grid)
+     - font-size, line-height
+     - min-height (tant que >= 120px pour .tier)
+     - border, box-shadow, background
+     - width, max-width (dimensionnement)
+
+   ✗ INTERDICTIONS STRICTES:
+     - display (sur .tier)
+     - flex-direction (sur .tier)
+     - margin-top avec valeur fixe (sur .counter)
+     - height: auto (sur icônes)
+     - Tout ce qui change la structure fondamentale
+
+   PROGRESSIVE ENHANCEMENT:
+   ------------------------
+   - :has() utilisé uniquement pour amélioration progressive
+   - Structure critique DOIT fonctionner sans :has()
+   - Préférer classes explicites (.tiers-container-keys) pour layouts
+
+   ========================================================================== */
+
 /* CSS Variables for theming and consistency */
 :root[data-theme="dark"] {
   --bg-primary: #000;
@@ -100,11 +158,14 @@ body {
   font-size: 16px;
   transition: color 0.3s ease;
   position: relative;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh; /* min-height au lieu de height pour permettre scroll si nécessaire */
+  min-height: 100dvh; /* Viewport dynamique pour mobile (barre d'adresse) */
+  overflow-x: hidden; /* Empêche scroll horizontal uniquement */
+  overflow-y: auto; /* Permet scroll vertical si nécessaire */
   display: flex;
   flex-direction: column;
-  -webkit-text-size-adjust: 100%; /* Empêche le zoom automatique du texte sur iOS */
+  -webkit-text-size-adjust: 100%; /* Empêche le zoom automatique du texte sur iOS/Safari */
+  text-size-adjust: 100%; /* Empêche le zoom automatique du texte sur Chrome/Edge moderne (non supporté par Firefox/Safari, mais Safari utilise -webkit-version ci-dessus) */
   -webkit-tap-highlight-color: transparent; /* Supprime le highlight bleu sur mobile */
 }
 
@@ -148,15 +209,14 @@ header {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: sticky;
+  position: sticky; /* INVARIANT: sticky pour header fixe en haut, pas relative */
   top: 0;
   z-index: 1000;
   flex-shrink: 0;
   /* Amélioration pour mobile */
   -webkit-transform: translateZ(0); /* Force l'accélération matérielle */
   transform: translateZ(0);
-  /* Position relative pour le menu mobile */
-  position: relative;
+  /* Note: Si position:relative nécessaire pour menu mobile, l'appliquer sur .header-content */
 }
 
 /* Ajustements pour le thème clair */
@@ -805,6 +865,7 @@ label:focus-within {
   display: flex;
   align-items: center;
   cursor: pointer;
+  -webkit-user-select: none; /* Support Safari/iOS */
   user-select: none;
 }
 
@@ -924,13 +985,9 @@ label:focus-within {
     margin-top: 0.8rem;
   }
   
-  /* Amélioration des cartes pour le tactile */
-  .tier {
-    padding: 0.9rem 0.7rem; /* Padding optimisé pour le tactile */
-    min-height: 110px;
-    touch-action: manipulation; /* Améliore la réactivité tactile */
-  }
-  
+  /* Note: Règles .tier déplacées dans le bloc @media 600px principal (ligne ~2784) */
+  /* pour éviter la duplication - voir le bloc complet plus bas */
+
   /* Boutons plus grands pour le tactile */
   .counter button {
     min-width: 44px;
@@ -954,24 +1011,50 @@ label:focus-within {
 
 /* Carte individuelle pour chaque tier */
 .tier {
+  /* ========================================================================
+     INVARIANTS STRUCTURELS - NE JAMAIS ÉCRASER CES PROPRIÉTÉS
+     ========================================================================
+     Les propriétés suivantes garantissent la cohésion de la carte et
+     DOIVENT rester inchangées dans tous les media queries:
+     - display: flex
+     - flex-direction: column
+     - position: relative
+     - min-width: 0
+     ======================================================================== */
+
+  /* Structure de base - conteneur principal autonome */
+  display: flex;
+  flex-direction: column; /* INVARIANT: Empile header/description/counter verticalement */
+  position: relative; /* INVARIANT: Pour le pseudo-élément décoratif position:absolute */
+
+  /* Contenu et espacement */
   background: var(--bg-tier);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   padding: 0.8rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: visible;
-  min-height: 120px;
-  display: flex;
-  flex-direction: column;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  width: auto; /* Réinitialiser la largeur */
-  max-width: 100%; /* Permet de s'adapter lors du zoom */
-  min-width: 0; /* Permet de rétrécir si nécessaire */
+
+  /* Dimensions et contraintes */
+  width: auto;
+  max-width: 100%;
+  min-width: 0; /* INVARIANT: Permet la compression si parent est en flex */
+  min-height: 120px; /* CRITIQUE: Hauteur minimale pour que margin-top:auto fonctionne sur .counter */
   box-sizing: border-box;
+
+  /* Overflow visible pour permettre les ombres/focus rings, mais le pseudo-élément est contraint via inset:0 */
+  overflow: visible;
+
+  /* Interactions */
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* CRITIQUE: Tous les enfants directs de .tier au-dessus du pseudo-élément */
+.tier > * {
+  position: relative;
+  z-index: 1; /* Au-dessus du pseudo-élément (z-index:0) */
 }
 
 /* S'assurer que les cartes de tiers (sans data-key-type) ont les bonnes dimensions */
@@ -987,21 +1070,34 @@ label:focus-within {
 .tier[data-token-type] {
   width: 100%;
   max-width: 100%;
-  min-height: 140px; /* Augmenter la hauteur minimale */
+  min-width: 0; /* CRITIQUE: Permet la compression si parent est en flex */
+  min-height: 140px; /* CRITIQUE: Hauteur minimale pour que margin-top:auto fonctionne */
   padding: 1.2rem; /* Augmenter le padding */
   box-sizing: border-box;
   margin: 0;
 }
 
 /* Conteneur des clés : une colonne pour que les cartes prennent toute la largeur */
+/* ========================================================================
+   STRUCTURE CLASS-BASED - Pas de dépendance à :has()
+   ========================================================================
+   Le sélecteur :has() était utilisé pour amélioration progressive, mais
+   créait une dépendance structurelle. La règle :has() a été DÉSACTIVÉE.
+
+   Utiliser UNIQUEMENT la classe explicite .tiers-container-keys pour
+   garantir un layout déterministe indépendant du support CSS.
+   ======================================================================== */
+
+/* DÉSACTIVÉ - Créait une dépendance structurelle
 #tiers:has(.tier[data-key-type]),
 #tiers:has(.tier[data-token-type]) {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 }
+*/
 
-/* Alternative si :has() n'est pas supporté - utiliser une classe spécifique */
+/* Classe explicite pour layout des keys/tokens - UNIQUE SOURCE DE VÉRITÉ */
 .tiers-container-keys {
   display: flex;
   flex-direction: column;
@@ -1026,13 +1122,21 @@ label:focus-within {
 
 .tier[data-key-type] .tier-icon,
 .tier[data-token-type] .tier-icon {
+  /* ========================================================================
+     INVARIANT: Tailles d'icônes fixes uniquement - jamais height:auto
+     ======================================================================== */
   width: 60px;
   height: 60px;
+  max-width: 100%; /* CRITIQUE: Empêche le débordement */
+  display: block; /* CRITIQUE: Évite l'espace inline */
 }
 
 .tier[data-key-type] .tier-name,
 .tier[data-token-type] .tier-name {
   font-size: 1.1rem;
+  overflow-wrap: anywhere; /* CRITIQUE: Évite le débordement des textes longs */
+  word-break: break-word; /* Support supplémentaire */
+  min-width: 0; /* Permet la compression */
 }
 
 .tier[data-key-type] .tier-category,
@@ -1048,12 +1152,15 @@ label:focus-within {
   color: var(--text-secondary);
   margin-bottom: 0.8rem;
   line-height: 1.4;
+  overflow-wrap: anywhere; /* CRITIQUE: Évite le débordement des textes longs */
+  word-break: break-word; /* Support supplémentaire */
+  min-width: 0; /* Permet la compression */
 }
 
 .tier[data-key-type] .counter,
 .tier[data-token-type] .counter {
   padding-top: 0.8rem;
-  margin-top: 0.8rem;
+  /* INVARIANT: margin-top:auto hérité de .counter - ne pas écraser */
   width: 100%; /* Prend toute la largeur de la carte */
   max-width: 100%; /* Ne dépasse pas la largeur de la carte */
   flex-wrap: nowrap;
@@ -1126,7 +1233,7 @@ label:focus-within {
 
 .tier[data-tier]:not([data-key-type]):not([data-token-type]) .counter {
   padding-top: 0.6rem !important;
-  margin-top: 0.5rem !important;
+  /* INVARIANT: margin-top:auto hérité de .counter - !important retiré pour respecter l'invariant */
 }
 
 .tier[data-tier]:not([data-key-type]):not([data-token-type]) .counter button {
@@ -1147,16 +1254,33 @@ label:focus-within {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Pseudo-élément décoratif - isolé du flux, CONTRAINT dans les limites */
 .tier::before {
+  /* ========================================================================
+     INVARIANT: Décoratif uniquement - ne doit JAMAIS affecter le layout
+     ========================================================================
+     Ce pseudo-élément est strictement isolé du flux de layout:
+     - position: absolute (hors flux)
+     - z-index: 0 (derrière le contenu qui est à z-index: 1)
+     - pointer-events: none (n'interfère pas avec les interactions)
+     - top/left/right: 0 (contraint horizontalement)
+     - height: 3px (hauteur fixe, décorative)
+     - bottom: auto (évite conflit avec height)
+
+     Tout contenu réel est au-dessus grâce à .tier > * { z-index: 1; }
+     ======================================================================== */
   content: '';
-  position: absolute;
+  position: absolute; /* Hors flux - ne perturbe pas le layout */
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
+  bottom: auto; /* Évite conflit avec height */
+  height: 3px; /* Hauteur fixe pour la ligne décorative */
   background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
   opacity: 0;
   transition: opacity 0.3s ease;
+  z-index: 0; /* En arrière-plan, sous le contenu */
+  pointer-events: none; /* N'interfère pas avec les clics */
 }
 
 .tier:hover {
@@ -1178,33 +1302,42 @@ label:focus-within {
   opacity: 1;
 }
 
-/* En-tête de la carte */
+/* En-tête de la carte - enfant direct de .tier, DANS LE FLUX */
 .tier-header {
   display: flex;
   align-items: center;
   gap: 0.6rem;
   margin-bottom: 0.6rem;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Ne rétrécit pas */
+  position: relative; /* Pour z-index */
+  z-index: 1; /* Au-dessus du pseudo-élément (z-index:0) */
+  min-width: 0; /* Permet la compression si nécessaire dans un flex parent */
 }
 
 .tier img,
 .tier-icon {
+  /* ========================================================================
+     INVARIANT: Tailles d'icônes fixes uniquement - jamais height:auto
+     ======================================================================== */
   width: 40px;
   height: 40px;
+  max-width: 100%; /* CRITIQUE: Empêche le débordement si l'image est plus grande */
   object-fit: contain;
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.4);
   padding: 0.3rem;
   flex-shrink: 0;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  display: block; /* CRITIQUE: Évite l'espace inline sous les images */
 }
 
 .tier-info {
   flex: 1;
-  min-width: 0;
+  min-width: 0; /* CRITIQUE: Permet la compression dans un flex parent */
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  overflow-wrap: anywhere; /* CRITIQUE: Évite le débordement des textes longs */
 }
 
 .tier legend,
@@ -1216,6 +1349,9 @@ label:focus-within {
   display: block;
   line-height: 1.2;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  overflow-wrap: anywhere; /* CRITIQUE: Évite le débordement des textes longs */
+  word-break: break-word; /* Support supplémentaire pour les mots longs */
+  min-width: 0; /* Permet la compression dans un flex parent */
 }
 
 .tier-category {
@@ -1250,8 +1386,15 @@ label:focus-within {
    Counter Controls (dans les cartes)
    ========================================================================== */
 
+/* Description - enfant direct de .tier, DANS LE FLUX */
 .tier-description {
-  display: none; /* Masquer pour gagner de l'espace */
+  display: none; /* Masqué par défaut pour les tiers normaux */
+  margin-bottom: 0.6rem;
+  flex-shrink: 0;
+  position: relative; /* Pour z-index */
+  z-index: 1; /* Au-dessus du pseudo-élément (z-index:0) */
+  min-width: 0; /* Permet la compression si nécessaire */
+  overflow-wrap: anywhere; /* Évite le débordement des textes longs */
 }
 
 /* État vide pour les types key et ancient-token */
@@ -1282,6 +1425,7 @@ label:focus-within {
   }
 }
 
+/* Counter - enfant direct de .tier, DANS LE FLUX, toujours en bas */
 .counter {
   display: flex;
   align-items: center;
@@ -1289,11 +1433,27 @@ label:focus-within {
   gap: 0.5rem;
   padding-top: 0.6rem;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
-  margin-top: 0.5rem;
-  flex-shrink: 0;
+
+  /* ========================================================================
+     INVARIANT CRITIQUE - NE JAMAIS ÉCRASER margin-top:auto
+     ========================================================================
+     Cette propriété pousse le counter en bas de la carte .tier.
+     Elle fonctionne grâce à:
+     - .tier { display: flex; flex-direction: column; min-height: 120px; }
+     - .counter est enfant direct de .tier
+
+     INTERDICTION: Ne jamais utiliser margin-top avec une valeur fixe (px, rem)
+     dans les media queries, cela briserait l'ancrage en bas de carte.
+     ======================================================================== */
+  margin-top: auto;
+
+  flex-shrink: 0; /* Ne rétrécit pas */
   width: 100%; /* Prend toute la largeur de la carte tier */
   max-width: 100%; /* Ne dépasse pas la largeur de la carte */
-  box-sizing: border-box; /* Inclut padding et border dans la largeur */
+  box-sizing: border-box;
+  position: relative; /* Pour z-index */
+  z-index: 1; /* Au-dessus du pseudo-élément (z-index:0) */
+  min-width: 0; /* Permet la compression si nécessaire dans un flex parent */
 }
 
 /* Ajustements pour le thème clair */
@@ -1473,6 +1633,7 @@ label:focus-within {
   font-size: 1rem;
   transition: all 0.2s ease;
   -moz-appearance: textfield; /* Remove spinner in Firefox */
+  appearance: textfield; /* Remove spinner in Chrome/Edge/Safari modernes */
 }
 
 /* Remove spinner in WebKit browsers */
@@ -1557,8 +1718,8 @@ label:focus-within {
 #results-section {
   position: relative;
   background: rgba(15, 15, 15, 0.7);
-  backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 0.8rem;
@@ -1650,8 +1811,26 @@ label:focus-within {
 
 /* Scrollbar pour Firefox - Thème dark */
 #results {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(204, 0, 0, 0.5) rgba(0, 0, 0, 0.3);
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(204, 0, 0, 0.5) rgba(0, 0, 0, 0.3); /* Firefox */
+}
+
+/* Styles WebKit pour Chrome/Safari */
+#results::-webkit-scrollbar {
+  width: 8px;
+}
+
+#results::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+#results::-webkit-scrollbar-thumb {
+  background: rgba(204, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+#results::-webkit-scrollbar-thumb:hover {
+  background: rgba(204, 0, 0, 0.7);
 }
 
 /* Scrollbar personnalisée pour #results - Thème light */
@@ -2206,14 +2385,9 @@ footer p {
 
 /* Tablet landscape and below (900px) */
 @media (max-width: 900px) {
-  .tiers-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  /* Note: .tiers-container n'existe pas, .tiers-grid est le conteneur réel */
+  /* Note: #results est en display:flex, pas grid - règles grid supprimées */
 
-  #results {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
   /* S'assurer que le conteneur des keys prend toute la largeur */
   .tiers-container-keys {
     width: 100%;
@@ -2225,7 +2399,7 @@ footer p {
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 1rem;
-    min-height: 130px;
+    min-height: 140px; /* INVARIANT: >= 140px pour key/token types */
     width: 100%;
     max-width: 100%;
   }
@@ -2345,7 +2519,7 @@ footer p {
   }
 
   .tier {
-    flex-direction: column;
+    /* INVARIANT: flex-direction:column déjà défini dans base .tier - override retiré */
     align-items: flex-start;
   }
 
@@ -2355,7 +2529,7 @@ footer p {
 
   .counter {
     margin-left: 0;
-    margin-top: 6px;
+    /* INVARIANT: margin-top:auto préservé - override retiré */
   }
 
   .counter button {
@@ -2379,7 +2553,7 @@ footer p {
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 0.9rem;
-    min-height: 125px;
+    min-height: 140px; /* INVARIANT: >= 140px pour key/token types */
     width: 100%;
     max-width: 100%;
   }
@@ -2410,7 +2584,7 @@ footer p {
   .tier[data-key-type] .counter,
   .tier[data-token-type] .counter {
     padding-top: 0.6rem;
-    margin-top: 0.6rem;
+    /* INVARIANT: margin-top:auto préservé - override retiré */
     gap: 0.4rem;
     flex-wrap: wrap;
     width: 100%; /* Prend toute la largeur de la carte */
@@ -2450,17 +2624,8 @@ footer p {
 
 /* Large mobile (700px) */
 @media (max-width: 700px) {
-  #results {
-    grid-template-columns: 1fr;
-  }
-}
+  /* Note: #results est en display:flex, pas grid - règle grid supprimée */
 
-/* Large mobile (700px) */
-@media (max-width: 700px) {
-  #results {
-    grid-template-columns: 1fr;
-  }
-  
   /* Ajustements pour les résultats sur grand mobile */
   #results-section {
     padding: 0.6rem;
@@ -2481,7 +2646,7 @@ footer p {
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 0.85rem;
-    min-height: 115px;
+    min-height: 140px; /* INVARIANT: >= 140px pour key/token types */
     width: 100%;
     max-width: 100%;
   }
@@ -2630,16 +2795,15 @@ footer p {
     min-height: 44px; /* Taille minimale pour le tactile */
   }
   
-  .tiers-container {
-    grid-template-columns: 1fr;
-  }
+  /* Note: .tiers-container n'existe pas - règle grid supprimée */
 
   /* Amélioration des cartes pour le tactile */
   .tier {
-    flex-direction: column;
+    /* INVARIANT: flex-direction:column déjà défini dans base .tier - override retiré */
     align-items: flex-start;
     padding: 0.9rem 0.7rem; /* Padding optimisé pour le tactile */
-    min-height: 110px;
+    min-height: 120px; /* INVARIANT: >= 120px requis pour margin-top:auto */
+    overflow: visible; /* Permettre les ombres et focus rings */
     touch-action: manipulation; /* Améliore la réactivité tactile */
   }
 
@@ -2649,7 +2813,7 @@ footer p {
 
   .counter {
     margin-left: 0;
-    margin-top: 6px;
+    /* INVARIANT: margin-top:auto préservé - override retiré */
   }
 
   /* Boutons plus grands pour le tactile */
@@ -2679,7 +2843,7 @@ footer p {
   }
 
   h2 {
-    font-size: 2rem;
+    font-size: 1.1rem; /* Légère augmentation sur mobile, pas 2rem */
   }
 
   #themeToggle {
@@ -2723,7 +2887,7 @@ footer p {
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 0.8rem;
-    min-height: 120px;
+    min-height: 140px; /* INVARIANT: >= 140px pour key/token types (pas 120px) */
     width: 100%;
     max-width: 100%;
   }
@@ -2762,7 +2926,7 @@ footer p {
   .tier[data-key-type] .counter,
   .tier[data-token-type] .counter {
     padding-top: 0.5rem;
-    margin-top: 0.5rem;
+    /* INVARIANT: margin-top:auto préservé - override retiré */
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.35rem;
@@ -2963,7 +3127,7 @@ footer p {
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 0.7rem;
-    min-height: 110px;
+    min-height: 140px; /* INVARIANT: >= 140px pour key/token types */
     width: 100%;
     max-width: 100%;
   }
@@ -3000,7 +3164,7 @@ footer p {
   .tier[data-key-type] .counter,
   .tier[data-token-type] .counter {
     padding-top: 0.4rem;
-    margin-top: 0.4rem;
+    /* INVARIANT: margin-top:auto préservé - override retiré */
     gap: 0.3rem;
     flex-wrap: wrap;
     justify-content: center;
