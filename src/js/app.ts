@@ -320,11 +320,93 @@ class App {
       
       btn.addEventListener('click', () => {
         this.switchCalculatorType(type);
+        // Fermer le menu mobile après sélection
+        this.closeMobileMenu();
       });
     });
     
+    // Configurer le menu hamburger mobile
+    this.setupMobileMenu();
+    
     // Mettre à jour le titre et la description
     this.updatePageTitle();
+  }
+
+  /**
+   * Configure le menu hamburger mobile
+   */
+  setupMobileMenu(): void {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (!mobileMenuBtn || !mobileMenu) return;
+    
+    // Toggle du menu au clic sur le bouton hamburger
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleMobileMenu();
+    });
+    
+    // Fermer le menu au clic en dehors
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!mobileMenu.contains(target) && !mobileMenuBtn.contains(target)) {
+        this.closeMobileMenu();
+      }
+    });
+    
+    // Fermer le menu avec la touche Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileMenu.getAttribute('aria-hidden') === 'false') {
+        this.closeMobileMenu();
+      }
+    });
+  }
+
+  /**
+   * Ouvre ou ferme le menu mobile
+   */
+  toggleMobileMenu(): void {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (!mobileMenuBtn || !mobileMenu) return;
+    
+    const isOpen = mobileMenu.getAttribute('aria-hidden') === 'false';
+    
+    if (isOpen) {
+      this.closeMobileMenu();
+    } else {
+      this.openMobileMenu();
+    }
+  }
+
+  /**
+   * Ouvre le menu mobile
+   */
+  openMobileMenu(): void {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (!mobileMenuBtn || !mobileMenu) return;
+    
+    mobileMenuBtn.setAttribute('aria-expanded', 'true');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+    mobileMenuBtn.setAttribute('aria-label', 'Fermer le menu');
+  }
+
+  /**
+   * Ferme le menu mobile
+   */
+  closeMobileMenu(): void {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (!mobileMenuBtn || !mobileMenu) return;
+    
+    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    mobileMenuBtn.setAttribute('aria-label', 'Ouvrir le menu');
   }
 
   /**
