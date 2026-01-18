@@ -7,47 +7,35 @@ import Calculator from './calculator';
 import UI from './ui';
 import { APP_CONFIG, CALCULATOR_TYPES } from './config';
 import type { CalculatorType } from '../types/index';
+import { ThemeSwitch, type ThemeMode } from './theme-switch';
 
 /**
- * Theme Manager - Gère le thème dark/light
+ * Theme Manager - Gère le thème avec ThemeSwitch (light/dark/system)
  */
+
 class ThemeManager {
-  private theme: 'dark' | 'light';
-  private toggleCheckbox: HTMLInputElement | null;
+  private themeSwitch: ThemeSwitch | null = null;
 
   constructor() {
-    const savedTheme = localStorage.getItem(APP_CONFIG.themeStorageKey);
-    this.theme = (savedTheme === 'dark' || savedTheme === 'light') 
-      ? savedTheme 
-      : APP_CONFIG.defaultTheme;
-    this.toggleCheckbox = document.getElementById('themeToggle') as HTMLInputElement | null;
     this.init();
   }
 
   init(): void {
-    this.apply();
-    if (this.toggleCheckbox) {
-      // Écouter le changement de la checkbox
-      this.toggleCheckbox.addEventListener('change', () => this.toggle());
+    try {
+      this.themeSwitch = new ThemeSwitch('themeToggleContainer', (mode: ThemeMode) => {
+        console.log(`Theme changé vers: ${mode}`);
+      });
+    } catch (error) {
+      console.error('Erreur lors de l\'initialisation du ThemeSwitch:', error);
     }
   }
 
-  toggle(): void {
-    this.theme = this.theme === 'dark' ? 'light' : 'dark';
-    this.apply();
-    localStorage.setItem(APP_CONFIG.themeStorageKey, this.theme);
+  getTheme(): 'light' | 'dark' {
+    return this.themeSwitch?.getEffectiveTheme() || APP_CONFIG.defaultTheme;
   }
 
-  apply(): void {
-    document.documentElement.setAttribute('data-theme', this.theme);
-    if (this.toggleCheckbox) {
-      // Synchroniser la checkbox avec le thème
-      // checked = dark mode (moon visible)
-      // unchecked = light mode (sun visible)
-      this.toggleCheckbox.checked = (this.theme === 'dark');
-      const label = this.theme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre';
-      this.toggleCheckbox.setAttribute('aria-label', label);
-    }
+  getMode(): ThemeMode {
+    return this.themeSwitch?.getMode() || APP_CONFIG.defaultTheme;
   }
 }
 

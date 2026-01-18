@@ -19,7 +19,7 @@ export const TOKEN_ICONS: Record<string, string> = {
   "Bronto Token": `${ICONS_PATH}Bronto's Ancient Token.png`,
   "Giga Token": `${ICONS_PATH}Gigant's Ancient Token.png`,
   "Rex Token": `${ICONS_PATH}Rex's Ancient Token.png`,
-  "Trice Token": `${ICONS_PATH}Trike's Ancient Token.png`,
+  "Trike Token": `${ICONS_PATH}Trike's Ancient Token.png`,
   "Stego Token": `${ICONS_PATH}Stego's Ancient Token.png`,
   "Quetz Token": `${ICONS_PATH}Quetz's Ancient Token.png`,
   "Wyvern Token": `${ICONS_PATH}Wyvern's Ancient Token.png`
