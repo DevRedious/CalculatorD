@@ -462,11 +462,17 @@ section {
   flex-direction: column;
   -webkit-overflow-scrolling: touch;
   order: 1; /* S'assurer que c'est la première colonne (gauche) */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 #calculator #tiers {
   flex: 1;
   min-height: 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* #results-section défini plus bas avec tous les styles */
@@ -718,6 +724,9 @@ label:focus-within {
   margin-bottom: 0;
   min-height: 0;
   padding: 0.5rem 0;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Quand le conteneur contient des clés, passer en flexbox column */
@@ -725,6 +734,9 @@ label:focus-within {
   display: flex;
   flex-direction: column;
   grid-template-columns: none;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1200px) {
@@ -793,6 +805,8 @@ label:focus-within {
   max-width: 100%;
   min-height: 140px; /* Augmenter la hauteur minimale */
   padding: 1.2rem; /* Augmenter le padding */
+  box-sizing: border-box;
+  margin: 0;
 }
 
 /* Conteneur des clés : une colonne pour que les cartes prennent toute la largeur */
@@ -808,6 +822,15 @@ label:focus-within {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* S'assurer que le conteneur des tiers prend toute la largeur disponible pour les keys */
+#tiers.tiers-container-keys {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Ajustements spécifiques pour les cartes de clés et tokens */
@@ -1976,11 +1999,20 @@ footer p {
     grid-template-columns: repeat(2, 1fr);
   }
   
+  /* S'assurer que le conteneur des keys prend toute la largeur */
+  .tiers-container-keys {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+  
   /* Ajustements pour les cartes de clés et tokens sur tablette */
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 1rem;
     min-height: 130px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .tier[data-key-type] .tier-icon,
@@ -2098,11 +2130,20 @@ footer p {
     font-size: 14px;
   }
   
+  /* S'assurer que le conteneur des keys prend toute la largeur sur tablette */
+  .tiers-container-keys {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+  
   /* Ajustements pour les cartes de clés et tokens sur tablette portrait */
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 0.9rem;
     min-height: 125px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .tier[data-key-type] .tier-header,
@@ -2171,11 +2212,20 @@ footer p {
     font-size: 13px;
   }
   
+  /* S'assurer que le conteneur des keys prend toute la largeur sur grand mobile */
+  .tiers-container-keys {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+  
   /* Ajustements pour les cartes de clés et tokens sur grand mobile */
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 0.85rem;
     min-height: 115px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .tier[data-key-type] .tier-icon,
@@ -2321,11 +2371,20 @@ footer p {
     padding: 0.45rem 0.55rem;
   }
   
+  /* S'assurer que le conteneur des keys prend toute la largeur sur mobile */
+  .tiers-container-keys {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+  
   /* Ajustements pour les cartes de clés et tokens sur mobile */
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 0.8rem;
     min-height: 120px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .tier[data-key-type] .tier-header,
@@ -2526,11 +2585,20 @@ footer p {
     font-size: 0.75rem;
   }
   
+  /* S'assurer que le conteneur des keys prend toute la largeur sur petit mobile */
+  .tiers-container-keys {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+  }
+  
   /* Ajustements pour les cartes de clés et tokens sur petit mobile */
   .tier[data-key-type],
   .tier[data-token-type] {
     padding: 0.7rem;
     min-height: 110px;
+    width: 100%;
+    max-width: 100%;
   }
   
   .tier[data-key-type] .tier-header,
