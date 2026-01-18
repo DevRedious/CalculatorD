@@ -104,6 +104,8 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  -webkit-text-size-adjust: 100%; /* Empêche le zoom automatique du texte sur iOS */
+  -webkit-tap-highlight-color: transparent; /* Supprime le highlight bleu sur mobile */
 }
 
 /* Background image fixe avec effet de flou */
@@ -150,6 +152,9 @@ header {
   top: 0;
   z-index: 1000;
   flex-shrink: 0;
+  /* Amélioration pour mobile */
+  -webkit-transform: translateZ(0); /* Force l'accélération matérielle */
+  transform: translateZ(0);
 }
 
 /* Ajustements pour le thème clair */
@@ -218,6 +223,9 @@ header {
     -6px -6px 12px rgba(255, 255, 255, 0.05),
     inset 2px 2px 4px rgba(0, 0, 0, 0.2);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  touch-action: manipulation; /* Améliore la réactivité tactile */
+  -webkit-tap-highlight-color: rgba(204, 0, 0, 0.2);
+  min-height: 44px; /* Taille minimale pour le tactile */
 }
 
 .calc-type-btn:hover {
@@ -609,6 +617,9 @@ label:focus-within {
     -8px -8px 16px rgba(204, 0, 0, 0.15),
     inset 2px 2px 4px rgba(204, 0, 0, 0.2);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  touch-action: manipulation; /* Améliore la réactivité tactile */
+  -webkit-tap-highlight-color: rgba(204, 0, 0, 0.2);
+  min-height: 44px; /* Taille minimale pour le tactile */
 }
 
 /* Ajustement text-shadow pour le thème clair */
@@ -770,6 +781,88 @@ label:focus-within {
   #calculator {
     order: 1;
     max-width: 100%;
+  }
+}
+
+/* Optimisations spécifiques pour mobile (600px et moins) */
+@media (max-width: 600px) {
+  .container {
+    padding: 0.5rem 0.4rem; /* Padding réduit pour mobile */
+    gap: 0.8rem; /* Gap réduit */
+  }
+  
+  /* Amélioration du scroll sur mobile */
+  #calculator {
+    -webkit-overflow-scrolling: touch; /* Scroll fluide sur iOS */
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  
+  #results-section {
+    padding: 0.6rem 0.5rem; /* Padding optimisé */
+    margin-top: 0.8rem;
+  }
+  
+  /* Amélioration des cartes pour le tactile */
+  .tier {
+    padding: 0.9rem 0.7rem; /* Padding optimisé pour le tactile */
+    min-height: 110px;
+    touch-action: manipulation; /* Améliore la réactivité tactile */
+  }
+  
+  /* Boutons plus grands pour le tactile */
+  .counter button {
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+  
+  /* Input optimisé pour mobile */
+  .counter input[type="number"] {
+    font-size: 1rem; /* Taille de police lisible */
+    padding: 0.4rem;
+    min-width: 50px;
+  }
+}
+
+/* Optimisations spécifiques pour mobile (600px et moins) */
+@media (max-width: 600px) {
+  .container {
+    padding: 0.5rem 0.4rem; /* Padding réduit pour mobile */
+    gap: 0.8rem; /* Gap réduit */
+  }
+  
+  /* Amélioration du scroll sur mobile */
+  #calculator {
+    -webkit-overflow-scrolling: touch; /* Scroll fluide sur iOS */
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  
+  #results-section {
+    padding: 0.6rem 0.5rem; /* Padding optimisé */
+    margin-top: 0.8rem;
+  }
+  
+  /* Amélioration des cartes pour le tactile */
+  .tier {
+    padding: 0.9rem 0.7rem; /* Padding optimisé pour le tactile */
+    min-height: 110px;
+    touch-action: manipulation; /* Améliore la réactivité tactile */
+  }
+  
+  /* Boutons plus grands pour le tactile */
+  .counter button {
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+  
+  /* Input optimisé pour mobile */
+  .counter input[type="number"] {
+    font-size: 1rem; /* Taille de police lisible */
+    padding: 0.4rem;
+    min-width: 50px;
   }
 }
 
@@ -1137,6 +1230,10 @@ label:focus-within {
   justify-content: center;
   cursor: pointer;
   position: relative;
+  touch-action: manipulation; /* Améliore la réactivité tactile */
+  -webkit-tap-highlight-color: rgba(204, 0, 0, 0.2);
+  min-width: 44px;
+  min-height: 44px;
 }
 
 /* Styles par défaut pour les boutons (surchargés par .plus et .minus) */
@@ -2350,13 +2447,40 @@ footer p {
   }
 }
 
-/* Mobile (600px) */
+/* Mobile (600px) - Version mobile optimisée */
 @media (max-width: 600px) {
+  /* Amélioration globale pour mobile */
+  * {
+    -webkit-tap-highlight-color: rgba(204, 0, 0, 0.2); /* Highlight personnalisé pour mobile */
+  }
+  
+  body {
+    font-size: 14px; /* Taille de police réduite pour mobile */
+  }
+  
+  .container {
+    padding: 0.5rem 0.4rem; /* Padding réduit pour mobile */
+    gap: 0.8rem; /* Gap réduit */
+  }
+  
+  /* Amélioration du scroll sur mobile */
+  #calculator {
+    -webkit-overflow-scrolling: touch; /* Scroll fluide sur iOS */
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  
+  #results-section {
+    padding: 0.6rem 0.5rem; /* Padding optimisé */
+    margin-top: 0.8rem;
+  }
+  
   .header-content {
     padding: 0.5rem 0.8rem;
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
+    min-height: auto;
   }
   
   .logo-text {
@@ -2393,19 +2517,24 @@ footer p {
     font-size: 0.85rem;
   }
   
-  /* Ajustements pour le reset button sur mobile 600px */
+  /* Ajustements pour le reset button sur mobile */
   #resetBtn {
     padding: 0.7rem 1.2rem;
     font-size: 0.8rem;
+    min-height: 44px; /* Taille minimale pour le tactile */
   }
   
   .tiers-container {
     grid-template-columns: 1fr;
   }
 
+  /* Amélioration des cartes pour le tactile */
   .tier {
     flex-direction: column;
     align-items: flex-start;
+    padding: 0.9rem 0.7rem; /* Padding optimisé pour le tactile */
+    min-height: 110px;
+    touch-action: manipulation; /* Améliore la réactivité tactile */
   }
 
   .tier img {
@@ -2417,21 +2546,22 @@ footer p {
     margin-top: 6px;
   }
 
+  /* Boutons plus grands pour le tactile */
   .counter button {
     width: var(--touch-target-md); /* WCAG 2.5.5: Minimum 44x44px */
     height: var(--touch-target-md);
     font-size: 22px;
+    min-width: 44px;
+    min-height: 44px;
+    touch-action: manipulation;
   }
 
+  /* Input optimisé pour mobile */
   .counter input[type="number"] {
     width: 60px;
-    font-size: 1.1rem;
-  }
-  
-  /* Ajustements pour le reset button sur mobile */
-  #resetBtn {
-    padding: 0.7rem 1.2rem;
-    font-size: 0.8rem;
+    font-size: 1rem; /* Taille de police lisible */
+    padding: 0.4rem;
+    min-width: 50px;
   }
 
   .result {
@@ -2593,10 +2723,15 @@ footer p {
   }
 }
 
-/* Small mobile (480px) */
+/* Small mobile (480px) - Version très petit écran */
 @media (max-width: 480px) {
+  body {
+    font-size: 13px; /* Taille de police encore plus réduite */
+  }
+  
   .container {
-    padding: 0.5rem;
+    padding: 0.4rem;
+    gap: 0.6rem; /* Gap encore plus réduit */
   }
   
   .header-content {
