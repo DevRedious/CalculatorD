@@ -42,7 +42,7 @@ Pour chaque token i :
 - Bronto Token : **2** par cluster
 - Giga Token : **2** par cluster
 - Rex Token : **2** par cluster
-- Trice Token : **2** par cluster
+- Trike Token : **2** par cluster
 - Stego Token : **2** par cluster
 - Quetz Token : **2** par cluster
 - Wyvern Token : **2** par cluster
@@ -82,7 +82,7 @@ Pour chaque ressource i :
 - Bronto Token : 2 × 5 = **10**
 - Giga Token : 2 × 5 = **10**
 - Rex Token : 2 × 5 = **10**
-- Trice Token : 2 × 5 = **10**
+- Trike Token : 2 × 5 = **10**
 - Stego Token : 2 × 5 = **10**
 - Quetz Token : 2 × 5 = **10**
 - Wyvern Token : 2 × 5 = **10**

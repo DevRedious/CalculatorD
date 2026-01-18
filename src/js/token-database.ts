@@ -37,7 +37,7 @@ export const TOKEN_COSTS: TokenCosts = {
     "Bronto Token": 2,
     "Giga Token": 2,
     "Rex Token": 2,
-    "Trice Token": 2,
+    "Trike Token": 2,
     "Stego Token": 2,
     "Quetz Token": 2,
     "Wyvern Token": 2
